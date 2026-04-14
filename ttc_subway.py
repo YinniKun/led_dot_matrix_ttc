@@ -22,7 +22,8 @@ class TTCCommandCenter:
         options.parallel = 1
         options.hardware_mapping = 'regular'
         options.drop_privileges = False       
-        options.gpio_slowdown = 2             
+        options.disable_hardware_pulsing = True  # Add this line
+        options.gpio_slowdown = 4                # Increase this from 2 to 4             
 
         self.matrix = RGBMatrix(options=options)
         self.canvas = self.matrix.CreateFrameCanvas()
@@ -30,7 +31,7 @@ class TTCCommandCenter:
         # Typography (CRITICAL: Using a smaller font to fit 4 lines)
         self.font = graphics.Font()
         # Ensure this points to your rpi-rgb-led-matrix fonts folder
-        self.font.LoadFont("/home/pi/rpi-rgb-led-matrix/fonts/5x8.bdf") 
+        self.font.LoadFont("/home/ric/rpi-rgb-led-matrix/fonts/5x8.bdf") 
         
         # Colors
         self.green = graphics.Color(22, 167, 83)  # Line 2

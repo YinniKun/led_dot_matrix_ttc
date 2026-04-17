@@ -8,7 +8,7 @@ options.rows = 32
 options.cols = 64
 options.chain_length = 1
 options.parallel = 1
-options.hardware_mapping = 'regular'
+options.hardware_mapping = 'adafruit'
 options.drop_privileges = False
 
 # THE CRITICAL PI 4 FIXES

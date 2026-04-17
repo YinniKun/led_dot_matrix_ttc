@@ -20,10 +20,11 @@ class TTCCommandCenter:
         options.cols = 64
         options.chain_length = 1
         options.parallel = 1
-        options.hardware_mapping = 'regular'
+        options.hardware_mapping = 'adafruit'
         options.drop_privileges = False       
         options.disable_hardware_pulsing = True  # Add this line
-        options.gpio_slowdown = 4                # Increase this from 2 to 4             
+        options.gpio_slowdown = 4                # Increase this from 2 to 4 
+        options.panel_type = "fm6126a"                # Slows the Pi 4 down so the matrix can read the data            
 
         self.matrix = RGBMatrix(options=options)
         self.canvas = self.matrix.CreateFrameCanvas()
@@ -33,7 +34,7 @@ class TTCCommandCenter:
         # Ensure this points to your rpi-rgb-led-matrix fonts folder
         self.font.LoadFont("/home/ric/rpi-rgb-led-matrix/fonts/5x8.bdf") 
         
-        # Colors
+        # Colours
         self.green = graphics.Color(22, 167, 83)  # Line 2
         self.yellow = graphics.Color(248, 195, 2) # Line 1
         self.purple = graphics.Color(128, 0, 128) # Line 4

@@ -12,7 +12,7 @@ class TTCCommandCenter:
         
         # API Endpoints
         self.ntas_base_url = "https://ntas.ttc.ca/api/ntas/get-next-train-time/"
-        self.alerts_url = "https://bustime.ttc.ca/gtfsrt/alerts"
+        self.alerts_url = "https://gtfsrt.ttc.ca/alerts/subway?format=text"
         
         # Matrix Hardware Configuration
         options = RGBMatrixOptions()
@@ -66,24 +66,39 @@ class TTCCommandCenter:
             return []
 
     def fetch_alerts(self):
-        status = {'1': 'OK', '2': 'OK', '4': 'OK', '5': 'OK'}
+        """Pulls subway alerts from the TTC's plain-text GTFS-RT feed."""
+        status = {'1': '-', '2': '-', '4': '-', '5': '-'}
+        
         try:
-            response = requests.get(self.alerts_url, timeout=5)
-            feed = gtfs_realtime_pb2.FeedMessage()
-            feed.ParseFromString(response.content)
+            # We use an honest, custom User-Agent. Firewalls are often more forgiving 
+            # of custom script names on text endpoints than fake Chrome browsers.
+            headers = {'User-Agent': 'RaspberryPi-Matrix-Display/1.0'}
+            response = requests.get(self.alerts_url, headers=headers, timeout=5)
             
-            for entity in feed.entity:
-                if entity.HasField('alert'):
-                    for informed in entity.alert.informed_entity:
-                        route = informed.route_id
-                        if route in status:
-                            if entity.alert.effect == 5:
-                                status[route] = 'x'
-                            else:
-                                status[route] = '!'
+            if response.status_code != 200:
+                return status
+                
+            text_data = response.text
+            
+            # Split the giant text blob into individual alert blocks
+            alert_blocks = text_data.split('entity {')
+            
+            for block in alert_blocks:
+                # Check each subway line
+                for line in status.keys():
+                    # The plain text feed formats it literally as: route_id: "1"
+                    if f'route_id: "{line}"' in block or f'route_id: "Line {line}"' in block:
+                        if 'effect: NO_SERVICE' in block:
+                            status[line] = 'x' # Hard closure
+                        else:
+                            # If it's just a delay, only set it to '!' if it isn't already 'x'
+                            if status[line] != 'x':
+                                status[line] = '!'
+                                
             return status
+            
         except Exception as e:
-            print(f"Alerts Error: {e}")
+            print(f"Plain-Text Alerts Error: {e}")
             return status
 
     def update_data(self):

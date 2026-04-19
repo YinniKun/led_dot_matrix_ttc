@@ -45,7 +45,7 @@ class TTCCommandCenter:
         # State Variables
         self.east_times = []
         self.west_times = []
-        self.subway_status = {'1': '-', '2': '-', '4': '-', '5': '-'}
+        self.subway_status = {'1': 'OK', '2': 'OK', '4': 'OK', '5': 'OK'}
         
         self.last_fetch_time = 0
         self.fetch_interval = 30 
@@ -67,7 +67,7 @@ class TTCCommandCenter:
 
     def fetch_alerts(self):
         """Pulls subway alerts from the TTC's plain-text GTFS-RT feed."""
-        status = {'1': '-', '2': '-', '4': '-', '5': '-'}
+        status = {'1': 'OK', '2': 'OK', '4': 'OK', '5': 'OK'}
         
         try:
             # We use an honest, custom User-Agent. Firewalls are often more forgiving 
@@ -135,7 +135,7 @@ class TTCCommandCenter:
             time_str = str(t) + ("," if i < len(times)-1 else "m")
             
             width = graphics.DrawText(self.canvas, self.font, current_x, y, draw_color, time_str)
-            current_x += width + 2 # Add a tiny 2px gap between numbers
+            current_x += width + 1 # Add a tiny 2px gap between numbers
 
     def run(self):
         print("Starting 3-Line Matrix. Press CTRL+C to stop.")

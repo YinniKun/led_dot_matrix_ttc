@@ -154,12 +154,12 @@ class TTCCommandCenter:
                 # --- LINE 1: Eastbound (Row 8) ---
                 self.draw_line_badge(0, 8, 2, self.green, self.white)
                 text_width = graphics.DrawText(self.canvas, self.font, 11, 8, self.white, "E:Ken")
-                self.draw_arrival_times(11 + text_width + 4, 8, self.east_times, self.orange, self.red, flash_on)
+                self.draw_arrival_times(11 + text_width + 2, 8, self.east_times, self.orange, self.red, flash_on)
                 
                 # --- LINE 2: Westbound (Row 17) ---
                 self.draw_line_badge(0, 17, 2, self.green, self.white)
                 text_width = graphics.DrawText(self.canvas, self.font, 11, 17, self.white, "W:Kip")
-                self.draw_arrival_times(11 + text_width + 4, 17, self.west_times, self.orange, self.red, flash_on)
+                self.draw_arrival_times(11 + text_width + 2, 17, self.west_times, self.orange, self.red, flash_on)
                 
                 # --- LINE 3: System Status (Row 27) ---
                 # Formats all 4 lines tightly on one row like: "1- 2! 4x 5-"

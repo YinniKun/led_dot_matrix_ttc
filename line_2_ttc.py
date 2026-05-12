@@ -85,7 +85,7 @@ class TTCCommandCenter:
             current_time = int(time.time())
             
             # Split the giant text blob into individual alert blocks
-            alert_blocks = text_data.split('entity {')
+            alert_blocks = text_data.split('\nentity {')
             
             for block in alert_blocks:
                 
@@ -113,7 +113,9 @@ class TTCCommandCenter:
                     # If this alert has schedules, but NONE are active right now, skip the whole block
                     if not is_active:
                         continue
-                        
+                # Skip the TTC's massive week-long "warning banners" for future night work
+                if 'cause: MAINTENANCE' in block and 'effect: REDUCED_SERVICE' in block:
+                    continue        
                 # 2. THE SUBWAY LINE CHECKER
                 for line in status.keys():
                     # The plain text feed formats it literally as: route_id: "1"

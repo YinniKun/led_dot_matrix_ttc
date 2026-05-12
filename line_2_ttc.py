@@ -3,6 +3,10 @@ import requests
 from google.transit import gtfs_realtime_pb2
 from rgbmatrix import RGBMatrix, RGBMatrixOptions, graphics
 
+#todo: implement alert for GO transit as well, 
+#todo: and make last line a "System Status" line that shows all 4 subway lines and GO with their current status
+#todo: with a rolling alert banner at the bottom to display all lines
+
 class TTCCommandCenter:
     def __init__(self, east_stop, west_stop, flash_time=3):
         # Stop IDs
@@ -86,6 +90,21 @@ class TTCCommandCenter:
             for block in alert_blocks:
                 # Check each subway line
                 for line in status.keys():
+                    # add a time checker to only mark the scheduled delay
+                    # time is formatted with start and end timestamps like: "active_period { start: 1700000000 end: 1700003600 }"
+                    current_time = int(time.time())
+                    if f"active_period {{ start: " in block and f"end: " in block:
+                        start_index = block.find("active_period { start: ") + len("active_period { start: ")
+                        end_index = block.find(" }", start_index)
+                        if start_index != -1 and end_index != -1:
+                            active_period = block[start_index:end_index].strip()
+                            start_time_str, end_time_str = active_period.split(" end: ")
+                            start_time = int(start_time_str)
+                            end_time = int(end_time_str)
+                            
+                            # Only consider it a current alert if we're within the active period
+                            if not (start_time <= current_time <= end_time):
+                                continue
                     # The plain text feed formats it literally as: route_id: "1"
                     if f'route_id: "{line}"' in block or f'route_id: "Line {line}"' in block:
                         if 'effect: NO_SERVICE' in block:

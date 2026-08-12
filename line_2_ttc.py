@@ -77,7 +77,7 @@ except ImportError:
     graphics = GraphicsMock()
 
 class TTCCommandCenter:
-    def __init__(self, east_stop, west_stop, flash_time=3, go_api_key=None, rotate_interval=5.0):
+    def __init__(self, east_stop, west_stop, flash_time=3, go_api_key=None, rotate_interval=3.0):
         # Stop IDs & Config
         self.east_stop = str(east_stop)
         self.west_stop = str(west_stop)
@@ -453,15 +453,15 @@ class TTCCommandCenter:
                 # --- LINE 3: ROTATING BOTTOM SCREEN (Row 27) ---
                 # Screen 0: TTC Subway Status (1, 2, 4, 5)
                 # Screen 1: Weather & Time (Temp, HH:MM, Weather Symbol)
-                # Screen 2: GO Transit Status (Lake Shore West & Stouffville Line)
-                screen_index = int(current_time / self.rotate_interval) % 3
+                # Screen 2: GO Transit Status (Lake Shore West & Stouffville Line) #! disabled for now
+                screen_index = int(current_time / self.rotate_interval) % 2
                 
                 if screen_index == 0:
                     self.draw_screen_1(27)
                 elif screen_index == 1:
                     self.draw_screen_2(27)
-                elif screen_index == 2:
-                    self.draw_screen_3(27)
+                # elif screen_index == 2:
+                #     self.draw_screen_3(27)
 
                 self.canvas = self.matrix.SwapOnVSync(self.canvas)
                 time.sleep(0.05)

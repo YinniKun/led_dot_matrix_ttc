@@ -1,8 +1,6 @@
 # TTC Subway Dot Matrix Display
 TTC real time display for dot matrix display, so you know if you need to hurry to catch your train!
 
-![](demo.png)
-
 ## Hardware
 - Raspberry Pi 4 Model B (2GB RAM)
 - A micro SD Card (for OS and storage of Pi)
@@ -16,10 +14,10 @@ TTC real time display for dot matrix display, so you know if you need to hurry t
 ## Usage
 Simply run with 
 
-sudo python line2_ttc.py
+``sudo python line_2_ttc.py``
 
 ## To dos
-- change last line tinbe a rolling display of GO trains and TTC
+- change last line to be a rolling display of GO trains and TTC
 - think about a way to display skipped stop
 - minor bug fix on line width (remove comma?)
 - general shpport for all TTC subways
